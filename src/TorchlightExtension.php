@@ -24,13 +24,11 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         // to gather up all the code blocks and send off our requests.
         $environment->addEventListener(DocumentParsedEvent::class, [$this, 'onDocumentParsed']);
 
-
         // After the document is parsed, it's rendered. We register our
         // renderers with a higher priority than the default ones,
         // and we'll fetch the blocks straight from the cache.
         $environment->addBlockRenderer(FencedCode::class, $this, 10);
         $environment->addBlockRenderer(IndentedCode::class, $this, 10);
-
     }
 
     /**
@@ -66,7 +64,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
     {
         $hash = $this->makeTorchlightBlock($block)->hash();
 
-        if (array_key_exists(static::$torchlightBlocks, $hash)) {
+        if (array_key_exists($hash, static::$torchlightBlocks)) {
             return static::$torchlightBlocks[$hash]->html;
         }
     }
