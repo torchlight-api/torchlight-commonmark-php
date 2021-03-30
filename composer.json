@@ -1,6 +1,6 @@
 {
     "name": "torchlight/commonmark-php",
-    "description": "A Commonmark extension for Torchlight, a syntax highlighting API.",
+    "description": "A Commonmark extension for Torchlight, the syntax highlighting API.",
     "homepage": "https://github.com/hammerstonedev/torchlight-commonmark-php",
     "type": "library",
     "license": "MIT",
@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^7.2|^8.0",
-        "torchlight/laravel": "^0.0.1",
+        "torchlight/laravel": "dev-main",
         "league/commonmark": "^1.5"
     },
     "require-dev": {
@@ -29,10 +29,5 @@
         }
     },
     "extra": {
-        "laravel": {
-            "providers": [
-                "Hammerstone\\Torchlight\\TorchlightServiceProvider"
-            ]
-        }
     }
 }
