@@ -65,7 +65,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         $hash = $this->makeTorchlightBlock($block)->hash();
 
         if (array_key_exists($hash, static::$torchlightBlocks)) {
-            return static::$torchlightBlocks[$hash]->html;
+            return static::$torchlightBlocks[$hash]->wrapped;
         }
     }
 
