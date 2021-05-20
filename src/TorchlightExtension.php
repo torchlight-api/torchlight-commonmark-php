@@ -1,9 +1,9 @@
 <?php
 
-namespace Hammerstone\Torchlight\Commonmark;
+namespace Torchlight\Commonmark;
 
-use Hammerstone\Torchlight\Block;
-use Hammerstone\Torchlight\Client;
+use Torchlight\Block;
+use Torchlight\Client;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
@@ -72,8 +72,8 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
     protected function makeTorchlightBlock($node)
     {
         return Block::make()
-            ->setLanguage($this->getLanguage($node))
-            ->setCode($node->getStringContent());
+            ->language($this->getLanguage($node))
+            ->code($node->getStringContent());
     }
 
     protected function isCodeNode($node)
