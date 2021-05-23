@@ -1,9 +1,16 @@
 {
-    "name": "torchlight/commonmark",
+    "name": "torchlight/torchlight-commonmark",
     "description": "A Commonmark extension for Torchlight, the syntax highlighting API.",
-    "homepage": "https://github.com/hammerstonedev/torchlight-commonmark-php",
+    "homepage": "https://torchlight.dev",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "markdown",
+        "commonmark",
+        "syntax highlighting",
+        "code highlighting",
+        "laravel"
+    ],
     "authors": [
         {
             "name": "Aaron Francis",
@@ -12,7 +19,7 @@
     ],
     "require": {
         "php": "^7.2|^8.0",
-        "torchlight/laravel": "^0.2.1",
+        "torchlight/torchlight-laravel": "^0.3.0",
         "league/commonmark": "^1.5"
     },
     "require-dev": {
