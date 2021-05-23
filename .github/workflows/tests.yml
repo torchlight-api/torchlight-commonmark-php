@@ -1,6 +1,10 @@
 name: Tests
 
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   test:
@@ -15,10 +19,6 @@ jobs:
         include:
           - laravel: 7.*
             testbench: 5.*
-
-          - laravel: 7.*
-            dependency-version: prefer-lowest
-            composer-version: --1
 
           - laravel: 8.*
             testbench: 6.*
@@ -44,7 +44,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer self-update ${{ matrix.composer-version }}
+          composer self-update
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
