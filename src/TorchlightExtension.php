@@ -2,8 +2,6 @@
 
 namespace Torchlight\Commonmark;
 
-use Torchlight\Block;
-use Torchlight\Client;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
@@ -13,6 +11,8 @@ use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\ExtensionInterface;
 use League\CommonMark\Util\Xml;
+use Torchlight\Block;
+use Torchlight\Client;
 
 class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
 {

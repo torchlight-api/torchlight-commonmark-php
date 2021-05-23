@@ -3,17 +3,15 @@
 namespace Torchlight\Commonmark\Tests;
 
 use Illuminate\Support\Facades\Http;
-use Torchlight\Block;
-use Torchlight\Client;
-use Torchlight\Commonmark\TorchlightExtension;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use Orchestra\Testbench\TestCase;
+use Torchlight\Block;
+use Torchlight\Commonmark\TorchlightExtension;
 
 class CodeRendererTest extends TestCase
 {
-
     protected function getEnvironmentSetUp($app)
     {
         config()->set('torchlight.token', 'token');
@@ -55,9 +53,9 @@ after
 EOT;
 
         $response = [
-            "blocks" => [[
-                "id" => "block_id_1",
-                "wrapped" => "<pre><code>highlighted</code></pre>",
+            'blocks' => [[
+                'id' => 'block_id_1',
+                'wrapped' => '<pre><code>highlighted</code></pre>',
             ]]
         ];
 
@@ -94,9 +92,8 @@ EOT;
         $this->render($markdown);
 
         Http::assertSent(function ($request) {
-            return $request['blocks'][0]['language'] === "foobarlang"
-                && $request['blocks'][0]['code'] === "<div>test</div>";
-
+            return $request['blocks'][0]['language'] === 'foobarlang'
+                && $request['blocks'][0]['code'] === '<div>test</div>';
         });
     }
 
@@ -121,22 +118,21 @@ after
 EOT;
 
         $response = [
-            "blocks" => [[
-                "id" => "block_id_3",
-                "wrapped" => "some js",
+            'blocks' => [[
+                'id' => 'block_id_3',
+                'wrapped' => 'some js',
             ], [
-                "id" => "block_id_1",
-                "wrapped" => "some php",
+                'id' => 'block_id_1',
+                'wrapped' => 'some php',
             ], [
-                "id" => "block_id_2",
-                "wrapped" => "some ruby",
+                'id' => 'block_id_2',
+                'wrapped' => 'some ruby',
             ]]
         ];
 
         Http::fake([
             'api.torchlight.dev/*' => Http::response($response, 200),
         ]);
-
 
         $html = $this->render($markdown);
 
@@ -153,6 +149,4 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
-
-
 }
