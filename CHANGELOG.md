@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 - 2021-05-28
+
+- Bump `torchlight/torchlight-laravel` dependency.
+
 ## 0.2.0 - 2021-05-22
 
 - Bump `torchlight/torchlight-laravel` dependency.
