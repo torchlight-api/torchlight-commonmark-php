@@ -2,6 +2,7 @@
 
 namespace Torchlight\Commonmark;
 
+use Illuminate\Support\Str;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
@@ -73,6 +74,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
     {
         return Block::make()
             ->language($this->getLanguage($node))
+            ->theme($this->getTheme($node))
             ->code($node->getStringContent());
     }
 
@@ -81,7 +83,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         return $node instanceof FencedCode || $node instanceof IndentedCode;
     }
 
-    protected function getLanguage($node)
+    protected function getInfo($node)
     {
         if (!$this->isCodeNode($node) || $node instanceof IndentedCode) {
             return null;
@@ -89,10 +91,23 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
 
         $infoWords = $node->getInfoWords();
 
-        if (empty($infoWords) || empty($infoWords[0])) {
-            return null;
-        }
-
-        return Xml::escape($infoWords[0], true);
+        return empty($infoWords) ? [] : $infoWords;
     }
+
+    protected function getLanguage($node)
+    {
+        $language = $this->getInfo($node)[0];
+
+        return $language ? Xml::escape($language, true) : null;
+    }
+
+    protected function getTheme($node)
+    {
+        foreach ($this->getInfo($node) as $item) {
+            if (Str::startsWith($item, 'theme:')) {
+                return Str::after($item, 'theme:');
+            }
+        }
+    }
+
 }

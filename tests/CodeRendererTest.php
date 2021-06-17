@@ -93,7 +93,31 @@ EOT;
 
         Http::assertSent(function ($request) {
             return $request['blocks'][0]['language'] === 'foobarlang'
-                && $request['blocks'][0]['code'] === '<div>test</div>';
+                && $request['blocks'][0]['code'] === '<div>test</div>'
+                && $request['blocks'][0]['theme'] === null;
+        });
+    }
+
+    /** @test */
+    public function can_set_theme()
+    {
+        $markdown = <<<'EOT'
+before
+
+```lang theme:daft-punk 
+<div>test</div>
+```
+after
+EOT;
+
+        Http::fake();
+
+        $this->render($markdown);
+
+        Http::assertSent(function ($request) {
+            return $request['blocks'][0]['language'] === 'lang'
+                && $request['blocks'][0]['code'] === '<div>test</div>'
+                && $request['blocks'][0]['theme'] === 'daft-punk';
         });
     }
 
