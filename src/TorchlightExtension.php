@@ -109,5 +109,4 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
             }
         }
     }
-
 }
