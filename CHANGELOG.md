@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 - 2021-07-31
+
+### Changed
+- Bump `torchlight/torchlight-laravel` dependency.
+- Use `Torchlight::highlight` instead of `(new Client)->highlight`
+
+
 ## 0.3.3 - 2021-07-31
 
 ### Changed
