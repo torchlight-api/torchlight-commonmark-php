@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 - 2021-07-31
+
+### Added
+- Ability to register a custom block renderer. Needed for Ibis client.
+
+
 ## 0.3.1 - 2021-06-17
 
 ### Added

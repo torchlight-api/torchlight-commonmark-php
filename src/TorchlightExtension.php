@@ -19,6 +19,8 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
 {
     public static $torchlightBlocks = [];
 
+    protected $customBlockRenderer;
+
     public function register(ConfigurableEnvironmentInterface $environment)
     {
         // We start by walking the document immediately after it's parsed
@@ -66,8 +68,19 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         $hash = $this->makeTorchlightBlock($block)->hash();
 
         if (array_key_exists($hash, static::$torchlightBlocks)) {
+            if ($this->customBlockRenderer) {
+                return call_user_func($this->customBlockRenderer, static::$torchlightBlocks[$hash]);
+            }
+
             return static::$torchlightBlocks[$hash]->wrapped;
         }
+    }
+
+    public function registerCustomBlockRenderer($callback)
+    {
+        $this->customBlockRenderer = $callback;
+
+        return $this;
     }
 
     protected function makeTorchlightBlock($node)

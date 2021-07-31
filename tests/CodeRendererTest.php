@@ -76,6 +76,50 @@ EOT;
     }
 
     /** @test */
+    public function it_can_set_a_custom_renderer()
+    {
+        $markdown = <<<'EOT'
+```html
+<div>html</div>
+```
+EOT;
+
+        $response = [
+            'blocks' => [[
+                'id' => 'block_id_1',
+                'wrapped' => '<pre><code>highlighted</code></pre>',
+            ]]
+        ];
+
+        Http::fake([
+            'api.torchlight.dev/*' => Http::response($response, 200),
+        ]);
+
+        $extension = new TorchlightExtension;
+        $extension->registerCustomBlockRenderer(function(Block $block) {
+            return 'foo_bar';
+        });
+
+        $environment = Environment::createCommonMarkEnvironment();
+        $environment->addExtension($extension);
+
+        $parser = new DocParser($environment);
+        $htmlRenderer = new HtmlRenderer($environment);
+
+        $document = $parser->parse($markdown);
+
+        $html = $htmlRenderer->renderBlock($document);
+
+        $expected = <<<EOT
+foo_bar
+
+EOT;
+
+        $this->assertEquals($expected, $html);
+    }
+
+
+    /** @test */
     public function gets_language_and_contents()
     {
         $markdown = <<<'EOT'
