@@ -13,7 +13,7 @@ use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\ExtensionInterface;
 use League\CommonMark\Util\Xml;
 use Torchlight\Block;
-use Torchlight\Client;
+use Torchlight\Torchlight;
 
 class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
 {
@@ -60,7 +60,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         // All we need to do is fire the request, which will store
         // the results in the cache. In the render function we
         // use that cached value.
-        (new Client)->highlight(static::$torchlightBlocks);
+        Torchlight::highlight(static::$torchlightBlocks);
     }
 
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
