@@ -76,7 +76,7 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         }
     }
 
-    public function registerCustomBlockRenderer($callback)
+    public function useCustomBlockRenderer($callback)
     {
         $this->customBlockRenderer = $callback;
 
