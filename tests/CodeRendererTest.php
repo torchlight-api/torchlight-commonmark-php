@@ -96,7 +96,7 @@ EOT;
         ]);
 
         $extension = new TorchlightExtension;
-        $extension->registerCustomBlockRenderer(function(Block $block) {
+        $extension->registerCustomBlockRenderer(function (Block $block) {
             return 'foo_bar';
         });
 
@@ -117,7 +117,6 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
-
 
     /** @test */
     public function gets_language_and_contents()
