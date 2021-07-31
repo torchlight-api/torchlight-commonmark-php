@@ -96,7 +96,7 @@ EOT;
         ]);
 
         $extension = new TorchlightExtension;
-        $extension->useCustomBlockRenderer(function(Block $block) {
+        $extension->useCustomBlockRenderer(function (Block $block) {
             return 'foo_bar';
         });
 
