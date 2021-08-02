@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 - 2021-08-02
+
+### Changed
+- Use a render function instead of the deprecated `wrapped` response from the API.
+
 ## 0.4.0 - 2021-07-31
 
 ### Changed

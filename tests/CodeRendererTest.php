@@ -55,7 +55,9 @@ EOT;
         $response = [
             'blocks' => [[
                 'id' => 'block_id_1',
-                'wrapped' => '<pre><code>highlighted</code></pre>',
+                'classes' => 'torchlight',
+                'styles' => 'color: red;',
+                'highlighted' => 'highlighted',
             ]]
         ];
 
@@ -67,7 +69,7 @@ EOT;
 
         $expected = <<<EOT
 <p>before</p>
-<pre><code>highlighted</code></pre>
+<pre><code class='torchlight' style='color: red;'>highlighted</code></pre>
 <p>after</p>
 
 EOT;
@@ -187,13 +189,13 @@ EOT;
         $response = [
             'blocks' => [[
                 'id' => 'block_id_3',
-                'wrapped' => 'some js',
+                'highlighted' => 'some js',
             ], [
                 'id' => 'block_id_1',
-                'wrapped' => 'some php',
+                'highlighted' => 'some php',
             ], [
                 'id' => 'block_id_2',
-                'wrapped' => 'some ruby',
+                'highlighted' => 'some ruby',
             ]]
         ];
 
@@ -207,9 +209,9 @@ EOT;
 
         $expected = <<<EOT
 <p>before</p>
-some php
-some ruby
-some js
+<pre><code class='' style=''>some php</code></pre>
+<pre><code class='' style=''>some ruby</code></pre>
+<pre><code class='' style=''>some js</code></pre>
 <p>after</p>
 
 EOT;

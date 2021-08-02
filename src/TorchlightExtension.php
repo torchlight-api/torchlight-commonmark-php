@@ -68,11 +68,9 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         $hash = $this->makeTorchlightBlock($block)->hash();
 
         if (array_key_exists($hash, static::$torchlightBlocks)) {
-            if ($this->customBlockRenderer) {
-                return call_user_func($this->customBlockRenderer, static::$torchlightBlocks[$hash]);
-            }
+            $renderer = $this->customBlockRenderer ?? $this->defaultBlockRenderer();
 
-            return static::$torchlightBlocks[$hash]->wrapped;
+            return call_user_func($renderer, static::$torchlightBlocks[$hash]);
         }
     }
 
@@ -81,6 +79,13 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         $this->customBlockRenderer = $callback;
 
         return $this;
+    }
+
+    public function defaultBlockRenderer()
+    {
+        return function (Block $block) {
+            return "<pre><code class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
+        };
     }
 
     protected function makeTorchlightBlock($node)
