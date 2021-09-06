@@ -1,0 +1,11 @@
+#!/bin/bash
+
+rm composer.lock
+composer require "league/commonmark:^1.0" -q
+
+./vendor/bin/phpunit
+
+composer require "league/commonmark:^2.0" -q
+
+./vendor/bin/phpunit
+

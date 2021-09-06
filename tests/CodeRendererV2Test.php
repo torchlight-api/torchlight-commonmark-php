@@ -3,19 +3,20 @@
 namespace Torchlight\Commonmark\Tests;
 
 use Illuminate\Support\Facades\Http;
-use League\CommonMark\DocParser;
-use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Parser\MarkdownParser;
+use League\CommonMark\Renderer\HtmlRenderer;
 use Orchestra\Testbench\TestCase;
 use Torchlight\Block;
-use Torchlight\Commonmark\TorchlightExtension;
+use Torchlight\Commonmark\TorchlightExtensionV2;
 
-class CodeRendererTest extends TestCase
+class CodeRendererV2Test extends TestCase
 {
     protected function getEnvironmentSetUp($app)
     {
-        if (!interface_exists('League\\CommonMark\\ConfigurableEnvironmentInterface')) {
-            $this->markTestSkipped('CommonMark V1 not detected.');
+        if (interface_exists('League\\CommonMark\\ConfigurableEnvironmentInterface')) {
+            $this->markTestSkipped('CommonMark V2 not detected.');
         }
 
         config()->set('torchlight.token', 'token');
@@ -33,19 +34,20 @@ class CodeRendererTest extends TestCase
 
     protected function render($markdown)
     {
-        $environment = Environment::createCommonMarkEnvironment();
-        $environment->addExtension(new TorchlightExtension);
+        $environment = new Environment();
+        $environment->addExtension(new CommonMarkCoreExtension);
+        $environment->addExtension(new TorchlightExtensionV2);
 
-        $parser = new DocParser($environment);
+        $parser = new MarkdownParser($environment);
         $htmlRenderer = new HtmlRenderer($environment);
 
         $document = $parser->parse($markdown);
 
-        return $htmlRenderer->renderBlock($document);
+        return (string)$htmlRenderer->renderDocument($document);
     }
 
     /** @test */
-    public function it_highlights_code_blocks()
+    public function it_highlights_code_blocks_v2()
     {
         $markdown = <<<'EOT'
 before
@@ -101,20 +103,21 @@ EOT;
             'api.torchlight.dev/*' => Http::response($response, 200),
         ]);
 
-        $extension = new TorchlightExtension;
+        $extension = new TorchlightExtensionV2();
         $extension->useCustomBlockRenderer(function (Block $block) {
             return 'foo_bar';
         });
 
-        $environment = Environment::createCommonMarkEnvironment();
+        $environment = new Environment();
+        $environment->addExtension(new CommonMarkCoreExtension);
         $environment->addExtension($extension);
 
-        $parser = new DocParser($environment);
+        $parser = new MarkdownParser($environment);
         $htmlRenderer = new HtmlRenderer($environment);
 
         $document = $parser->parse($markdown);
 
-        $html = $htmlRenderer->renderBlock($document);
+        $html = (string)$htmlRenderer->renderDocument($document);
 
         $expected = <<<EOT
 foo_bar
