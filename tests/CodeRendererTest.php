@@ -210,7 +210,6 @@ EOT;
         });
     }
 
-
     /** @test */
     public function doesnt_load_heredoc()
     {
@@ -230,7 +229,6 @@ EOT;
             return $request['blocks'][0]['code'] === "<<<SQL\nselect 1;\nSQL;";
         });
     }
-
 
     /** @test */
     public function it_sends_one_request_only_and_matches_by_id()

@@ -2,7 +2,6 @@
 
 namespace Torchlight\Commonmark;
 
-
 use Illuminate\Support\Str;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
