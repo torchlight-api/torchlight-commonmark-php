@@ -15,7 +15,7 @@ jobs:
       matrix:
         php: [ 7.3, 7.4, 8.0 ]
         laravel: [ 7.*, 8.* ]
-        commonmark: [^1.0, ^2.0]
+        commonmark: [ ^1.0, ^2.0 ]
         dependency-version: [ prefer-lowest, prefer-stable ]
         include:
           - laravel: 7.*
@@ -28,6 +28,10 @@ jobs:
           # Commonmark 2.0 requires PHP 7.4
           - commonmark: ^2.0
             php: 7.3
+
+          # Laravel 7 requires commonmark 1
+          - commonmark: ^2.0
+            laravel: 7.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - C${{ matrix.commonmark }} - ${{ matrix.dependency-version }}
 
