@@ -93,12 +93,30 @@ class TorchlightExtension implements ExtensionInterface, BlockRendererInterface
         return Block::make()
             ->language($this->getLanguage($node))
             ->theme($this->getTheme($node))
-            ->code($node->getStringContent());
+            ->code($this->getContent($node));
     }
 
     protected function isCodeNode($node)
     {
         return $node instanceof FencedCode || $node instanceof IndentedCode;
+    }
+
+    protected function getContent($node)
+    {
+        $content = $node->getStringContent();
+
+        if (!Str::startsWith($content, '<<<')) {
+            return $content;
+        }
+
+        $file = trim(Str::after($content, '<<<'));
+
+        // It must be only one line, because otherwise it might be a heredoc.
+        if (count(explode("\n", $file)) > 1) {
+            return $content;
+        }
+
+        return Torchlight::processFileContents($file) ?: $content;
     }
 
     protected function getInfo($node)

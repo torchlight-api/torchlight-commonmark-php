@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.2|^8.0",
         "league/commonmark": "^1.5",
-        "torchlight/torchlight-laravel": "^0.5.0"
+        "torchlight/torchlight-laravel": "^0.5.5"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0|^6.0",

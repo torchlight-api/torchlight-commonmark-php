@@ -167,6 +167,68 @@ EOT;
     }
 
     /** @test */
+    public function can_load_file()
+    {
+        config()->set('torchlight.snippet_directories', [
+            __DIR__
+        ]);
+
+        $markdown = <<<'EOT'
+``` 
+<<< Support/file1.php
+```
+EOT;
+
+        Http::fake();
+
+        $this->render($markdown);
+
+        Http::assertSent(function ($request) {
+            return $request['blocks'][0]['code'] === '// this is file 1';
+        });
+    }
+
+    /** @test */
+    public function non_existent_file_just_stays()
+    {
+        $markdown = <<<'EOT'
+``` 
+<<< Support/nonexistent.php
+```
+EOT;
+
+        Http::fake();
+
+        $this->render($markdown);
+
+        Http::assertSent(function ($request) {
+            return $request['blocks'][0]['code'] === '<<< Support/nonexistent.php';
+        });
+    }
+
+
+    /** @test */
+    public function doesnt_load_heredoc()
+    {
+        $markdown = <<<'EOT'
+``` 
+<<<SQL
+select 1;
+SQL;
+```
+EOT;
+
+        Http::fake();
+
+        $this->render($markdown);
+
+        Http::assertSent(function ($request) {
+            return $request['blocks'][0]['code'] === "<<<SQL\nselect 1;\nSQL;";
+        });
+    }
+
+
+    /** @test */
     public function it_sends_one_request_only_and_matches_by_id()
     {
         $markdown = <<<'EOT'

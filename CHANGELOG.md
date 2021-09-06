@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- You can now load files from markdown by using the `<<< file.php` convention.
+
 ## 0.4.1 - 2021-08-02
 
 ### Changed
