@@ -2,8 +2,11 @@
 
 [![Tests](https://github.com/torchlight-api/torchlight-commonmark-php/actions/workflows/tests.yml/badge.svg)](https://github.com/torchlight-api/torchlight-commonmark-php/actions/workflows/tests.yml) [![Latest Stable Version](https://poser.pugx.org/torchlight/torchlight-commonmark/v)](//packagist.org/packages/torchlight/torchlight-commonmark) [![Total Downloads](https://poser.pugx.org/torchlight/torchlight-commonmark/downloads)](//packagist.org/packages/torchlight/torchlight-commonmark) [![License](https://poser.pugx.org/torchlight/torchlight-commonmark/license)](//packagist.org/packages/torchlight/torchlight-commonmark)
 
+> 📚 The full docs can be found at [torchlight.dev/docs/clients/commonmark-php](https://torchlight.dev/docs/clients/commonmark-php).
 
 A [Torchlight](https://torchlight.dev) syntax highlighting extension for the PHP League's [Commonmark Markdown Parser](https://commonmark.thephpleague.com/) in a Laravel application.
+
+Supports both CommonMark version 1 and version 2.
 
 Torchlight is a VS Code-compatible syntax highlighter that requires no JavaScript, supports every language, every VS Code theme, line highlighting, git diffing, and more.
 
@@ -11,7 +14,7 @@ Torchlight is a VS Code-compatible syntax highlighter that requires no JavaScrip
 
 To install, require the package from composer:
 
-```
+```shell
 composer require torchlight/torchlight-commonmark
 ```
 
@@ -31,7 +34,13 @@ If you are using Graham Campbell's [Laravel Markdown](https://github.com/GrahamC
 If you aren't using the Laravel Markdown package, you can add the extension manually:
 
 ```php
+// CommonMark V1
 $environment = Environment::createCommonMarkEnvironment();
+$environment->addExtension(new TorchlightExtension);
+
+// CommonMark V2
+$environment = new Environment();
+$environment->addExtension(new CommonMarkCoreExtension);
 $environment->addExtension(new TorchlightExtension);
 ```
 
@@ -41,7 +50,7 @@ $environment->addExtension(new TorchlightExtension);
 
 Once the package is downloaded, you can run the following command to publish your configuration file:
 
-```
+```shell
 php artisan torchlight:install
 ```
 

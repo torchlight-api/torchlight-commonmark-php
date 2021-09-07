@@ -2,8 +2,14 @@
 
 ## Unreleased
 
+## 0.5.0 - 2021-09-06
+
+### Changed
+- Deprecated `\Torchlight\Commonmark\TorchlightExtension` in favor of the versioned `\Torchlight\Commonmark\V1\TorchlightExtension` and `\Torchlight\Commonmark\V2\TorchlightExtension` extensions 
+
 ### Added
-- You can now load files from markdown by using the `<<< file.php` convention.
+- You can now load files from markdown by using the `<<< path/to/file.php` convention.
+- Added support for CommonMark V2
 
 ## 0.4.1 - 2021-08-02
 
