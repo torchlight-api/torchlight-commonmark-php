@@ -147,7 +147,7 @@ abstract class BaseExtension
         $content = $this->getLiteralContent($node);
 
         // Check for our file loading convention.
-        if (!Str::startsWith($content, '<<<')) {
+        if (!Str::contains($content, '<<<')) {
             return $content;
         }
 
@@ -157,6 +157,9 @@ abstract class BaseExtension
         if (count(explode("\n", $file)) > 1) {
             return $content;
         }
+
+        // Blow off the end of comments that require closing tags, e.g. <!-- -->
+        $file = head(explode(' ', $file));
 
         return Torchlight::processFileContents($file) ?: $content;
     }

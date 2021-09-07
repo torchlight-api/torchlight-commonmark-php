@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.5.1 - 2021-09-06
+
+### Changed
+- When loading content from files using the `<<< path/to/file.php` convention, you can now wrap it in a comment e.g. `// <<<path/to.file.php`.
+
 ## 0.5.0 - 2021-09-06
 
 ### Changed
