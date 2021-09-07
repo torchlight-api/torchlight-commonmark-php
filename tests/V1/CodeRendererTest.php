@@ -9,7 +9,6 @@ use Torchlight\Commonmark\Tests\BaseRendererTest;
 
 class CodeRendererTest extends BaseRendererTest
 {
-
     protected function version()
     {
         return 1;

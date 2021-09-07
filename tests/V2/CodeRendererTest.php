@@ -10,7 +10,6 @@ use Torchlight\Commonmark\Tests\BaseRendererTest;
 
 class CodeRendererTest extends BaseRendererTest
 {
-
     protected function version()
     {
         return 2;
@@ -34,5 +33,4 @@ class CodeRendererTest extends BaseRendererTest
 
         return (string)$htmlRenderer->renderDocument($document);
     }
-
 }

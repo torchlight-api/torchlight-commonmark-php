@@ -3,12 +3,8 @@
 namespace Torchlight\Commonmark\Tests;
 
 use Illuminate\Support\Facades\Http;
-use League\CommonMark\DocParser;
-use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
 use Orchestra\Testbench\TestCase;
 use Torchlight\Block;
-use Torchlight\Commonmark\TorchlightExtension;
 
 abstract class BaseRendererTest extends TestCase
 {
@@ -255,7 +251,6 @@ EOT;
             'api.torchlight.dev/*' => Http::response($response, 200),
         ]);
 
-
         $extension = $this->extension();
         $extension = new $extension;
         $extension->useCustomBlockRenderer(function (Block $block) {
@@ -271,5 +266,4 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
-
 }

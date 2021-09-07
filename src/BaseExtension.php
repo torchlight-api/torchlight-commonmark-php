@@ -3,12 +3,7 @@
 namespace Torchlight\Commonmark;
 
 use Illuminate\Support\Str;
-use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
-use League\CommonMark\Block\Renderer\BlockRendererInterface;
-use League\CommonMark\ConfigurableEnvironmentInterface;
-use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Util\Xml;
 use Torchlight\Block;
