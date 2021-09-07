@@ -10,12 +10,14 @@ use Orchestra\Testbench\TestCase;
 use Torchlight\Block;
 use Torchlight\Commonmark\TorchlightExtension;
 
-class CodeRendererTest extends TestCase
+abstract class BaseRendererTest extends TestCase
 {
     protected function getEnvironmentSetUp($app)
     {
-        if (!interface_exists('League\\CommonMark\\ConfigurableEnvironmentInterface')) {
-            $this->markTestSkipped('CommonMark V1 not detected.');
+        $version = interface_exists('League\\CommonMark\\ConfigurableEnvironmentInterface') ? 1 : 2;
+
+        if ($version !== $this->version()) {
+            return $this->markTestSkipped('Skipping incompatible version test.');
         }
 
         config()->set('torchlight.token', 'token');
@@ -31,18 +33,11 @@ class CodeRendererTest extends TestCase
         };
     }
 
-    protected function render($markdown)
-    {
-        $environment = Environment::createCommonMarkEnvironment();
-        $environment->addExtension(new TorchlightExtension);
+    abstract protected function version();
 
-        $parser = new DocParser($environment);
-        $htmlRenderer = new HtmlRenderer($environment);
+    abstract protected function extension();
 
-        $document = $parser->parse($markdown);
-
-        return $htmlRenderer->renderBlock($document);
-    }
+    abstract protected function render($markdown, $extension = null);
 
     /** @test */
     public function it_highlights_code_blocks()
@@ -75,49 +70,6 @@ EOT;
 <p>before</p>
 <pre><code class='torchlight' style='color: red;'>highlighted</code></pre>
 <p>after</p>
-
-EOT;
-
-        $this->assertEquals($expected, $html);
-    }
-
-    /** @test */
-    public function it_can_set_a_custom_renderer()
-    {
-        $markdown = <<<'EOT'
-```html
-<div>html</div>
-```
-EOT;
-
-        $response = [
-            'blocks' => [[
-                'id' => 'block_id_1',
-                'wrapped' => '<pre><code>highlighted</code></pre>',
-            ]]
-        ];
-
-        Http::fake([
-            'api.torchlight.dev/*' => Http::response($response, 200),
-        ]);
-
-        $extension = new TorchlightExtension;
-        $extension->useCustomBlockRenderer(function (Block $block) {
-            return 'foo_bar';
-        });
-
-        $environment = Environment::createCommonMarkEnvironment();
-        $environment->addExtension($extension);
-
-        $parser = new DocParser($environment);
-        $htmlRenderer = new HtmlRenderer($environment);
-
-        $document = $parser->parse($markdown);
-
-        $html = $htmlRenderer->renderBlock($document);
-
-        $expected = <<<EOT
-foo_bar
 
 EOT;
 
@@ -282,4 +234,42 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
+
+    /** @test */
+    public function it_can_set_a_custom_renderer()
+    {
+        $markdown = <<<'EOT'
+```html
+<div>html</div>
+```
+EOT;
+
+        $response = [
+            'blocks' => [[
+                'id' => 'block_id_1',
+                'wrapped' => '<pre><code>highlighted</code></pre>',
+            ]]
+        ];
+
+        Http::fake([
+            'api.torchlight.dev/*' => Http::response($response, 200),
+        ]);
+
+
+        $extension = $this->extension();
+        $extension = new $extension;
+        $extension->useCustomBlockRenderer(function (Block $block) {
+            return 'foo_bar';
+        });
+
+        $html = $this->render($markdown, $extension);
+
+        $expected = <<<EOT
+foo_bar
+
+EOT;
+
+        $this->assertEquals($expected, $html);
+    }
+
 }

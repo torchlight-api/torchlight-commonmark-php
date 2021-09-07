@@ -3,41 +3,37 @@
 namespace Torchlight\Commonmark;
 
 use Illuminate\Support\Str;
-use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Block\Element\AbstractBlock;
+use League\CommonMark\Block\Element\FencedCode;
+use League\CommonMark\Block\Element\IndentedCode;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
+use League\CommonMark\ConfigurableEnvironmentInterface;
+use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
-use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
-use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
-use League\CommonMark\Extension\ExtensionInterface;
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
 use League\CommonMark\Util\Xml;
 use Torchlight\Block;
 use Torchlight\Torchlight;
 
-class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
+abstract class BaseExtension
 {
+    /**
+     * @var array
+     */
     public static $torchlightBlocks = [];
 
-    public function register(EnvironmentBuilderInterface $environment): void
-    {
-        // We start by walking the document immediately after it's parsed
-        // to gather up all the code blocks and send off our requests.
-        $environment->addEventListener(DocumentParsedEvent::class, [$this, 'onDocumentParsed']);
+    /**
+     * @var callable
+     */
+    protected $customBlockRenderer;
 
-        // After the document is parsed, it's rendered. We register our
-        // renderers with a higher priority than the default ones,
-        // and we'll fetch the blocks straight from the cache.
-        $environment->addRenderer(FencedCode::class, $this, 10);
-        $environment->addRenderer(IndentedCode::class, $this, 10);
-    }
-
+    /**
+     * @param DocumentParsedEvent $event
+     */
     public function onDocumentParsed(DocumentParsedEvent $event)
     {
         $walker = $event->getDocument()->walker();
 
         while ($event = $walker->next()) {
-            /** @var FencedCode|IndentedCode $node */
             $node = $event->getNode();
 
             // Only look for code nodes, and only process them upon entering.
@@ -59,7 +55,84 @@ class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
         Torchlight::highlight(static::$torchlightBlocks);
     }
 
-    public function render(Node $node, ChildNodeRendererInterface $childRenderer)
+    /**
+     * @param callable $callback
+     * @return $this
+     */
+    public function useCustomBlockRenderer($callback)
+    {
+        $this->customBlockRenderer = $callback;
+
+        return $this;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function defaultBlockRenderer()
+    {
+        return function (Block $block) {
+            return "<pre><code class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
+        };
+    }
+
+    /**
+     * @return array
+     */
+    abstract protected function codeNodes();
+
+    /**
+     * @param $node
+     * @return string
+     */
+    abstract protected function getLiteralContent($node);
+
+    /**
+     * Bind into a Commonmark V1 or V2 environment.
+     *
+     * @param $environment
+     * @param string $renderMethod
+     */
+    protected function bind($environment, $renderMethod)
+    {
+        // We start by walking the document immediately after it's parsed
+        // to gather up all the code blocks and send off our requests.
+        $environment->addEventListener(DocumentParsedEvent::class, [$this, 'onDocumentParsed']);
+
+        foreach ($this->codeNodes() as $blockType) {
+            // After the document is parsed, it's rendered. We register our
+            // renderers with a higher priority than the default ones,
+            // and we'll fetch the blocks straight from the cache.
+            $environment->{$renderMethod}($blockType, $this, 10);
+        }
+    }
+
+    /**
+     * @param $node
+     * @return bool
+     */
+    protected function isCodeNode($node)
+    {
+        return in_array(get_class($node), $this->codeNodes());
+    }
+
+    /**
+     * @param $node
+     * @return Block
+     */
+    protected function makeTorchlightBlock($node)
+    {
+        return Block::make()
+            ->language($this->getLanguage($node))
+            ->theme($this->getTheme($node))
+            ->code($this->getContent($node));
+    }
+
+    /**
+     * @param $node
+     * @return string
+     */
+    protected function renderNode($node)
     {
         $hash = $this->makeTorchlightBlock($node)->hash();
 
@@ -70,37 +143,15 @@ class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
         }
     }
 
-    public function useCustomBlockRenderer($callback)
-    {
-        $this->customBlockRenderer = $callback;
-
-        return $this;
-    }
-
-    public function defaultBlockRenderer()
-    {
-        return function (Block $block) {
-            return "<pre><code class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
-        };
-    }
-
-    protected function makeTorchlightBlock($node)
-    {
-        return Block::make()
-            ->language($this->getLanguage($node))
-            ->theme($this->getTheme($node))
-            ->code($this->getContent($node));
-    }
-
-    protected function isCodeNode($node)
-    {
-        return $node instanceof FencedCode || $node instanceof IndentedCode;
-    }
-
+    /**
+     * @param $node
+     * @return string
+     */
     protected function getContent($node)
     {
-        $content = $node->getLiteral();
+        $content = $this->getLiteralContent($node);
 
+        // Check for our file loading convention.
         if (!Str::startsWith($content, '<<<')) {
             return $content;
         }
@@ -115,6 +166,10 @@ class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
         return Torchlight::processFileContents($file) ?: $content;
     }
 
+    /**
+     * @param $node
+     * @return array|mixed|null
+     */
     protected function getInfo($node)
     {
         if (!$this->isCodeNode($node) || $node instanceof IndentedCode) {
@@ -126,6 +181,10 @@ class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
         return empty($infoWords) ? [] : $infoWords;
     }
 
+    /**
+     * @param $node
+     * @return string|null
+     */
     protected function getLanguage($node)
     {
         $language = $this->getInfo($node)[0];
@@ -133,6 +192,10 @@ class TorchlightExtensionV2 implements ExtensionInterface, NodeRendererInterface
         return $language ? Xml::escape($language, true) : null;
     }
 
+    /**
+     * @param $node
+     * @return string
+     */
     protected function getTheme($node)
     {
         foreach ($this->getInfo($node) as $item) {
