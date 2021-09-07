@@ -162,7 +162,6 @@ EOT;
         });
     }
 
-
     /** @test */
     public function can_load_file_with_two_part_comment()
     {
@@ -184,7 +183,6 @@ EOT;
             return $request['blocks'][0]['code'] === '// this is file 1';
         });
     }
-
 
     /** @test */
     public function non_existent_file_just_stays()
