@@ -139,7 +139,6 @@ EOT;
         });
     }
 
-
     /** @test */
     public function can_load_file()
     {

@@ -4,6 +4,7 @@ namespace Torchlight\Commonmark;
 
 /**
  * Class TorchlightExtension
+ *
  * @deprecated use \Torchlight\Commonmark\V1\TorchlightExtension instead.
  * @see \Torchlight\Commonmark\V1\TorchlightExtension
  */

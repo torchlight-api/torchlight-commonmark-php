@@ -21,7 +21,7 @@ abstract class BaseExtension
     protected $customBlockRenderer;
 
     /**
-     * @param DocumentParsedEvent $event
+     * @param  DocumentParsedEvent  $event
      */
     public function onDocumentParsed(DocumentParsedEvent $event)
     {
@@ -50,7 +50,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param callable $callback
+     * @param  callable  $callback
      * @return $this
      */
     public function useCustomBlockRenderer($callback)
@@ -85,7 +85,7 @@ abstract class BaseExtension
      * Bind into a Commonmark V1 or V2 environment.
      *
      * @param $environment
-     * @param string $renderMethod
+     * @param  string  $renderMethod
      */
     protected function bind($environment, $renderMethod)
     {

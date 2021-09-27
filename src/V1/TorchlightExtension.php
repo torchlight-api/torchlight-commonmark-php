@@ -17,7 +17,7 @@ class TorchlightExtension extends BaseExtension implements ExtensionInterface, B
      * This method just proxies to our base class, but the
      * signature has to match Commonmark V1.
      *
-     * @param ConfigurableEnvironmentInterface $environment
+     * @param  ConfigurableEnvironmentInterface  $environment
      */
     public function register(ConfigurableEnvironmentInterface $environment)
     {
@@ -28,9 +28,9 @@ class TorchlightExtension extends BaseExtension implements ExtensionInterface, B
      * This method just proxies to our base class, but the
      * signature has to match Commonmark V1.
      *
-     * @param AbstractBlock $block
-     * @param ElementRendererInterface $htmlRenderer
-     * @param false $inTightList
+     * @param  AbstractBlock  $block
+     * @param  ElementRendererInterface  $htmlRenderer
+     * @param  false  $inTightList
      * @return mixed
      */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
