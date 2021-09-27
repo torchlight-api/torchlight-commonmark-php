@@ -3,7 +3,6 @@
 namespace Torchlight\Commonmark;
 
 use Illuminate\Support\Str;
-use League\CommonMark\Block\Element\IndentedCode;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Util\Xml;
 use Torchlight\Block;
@@ -170,8 +169,12 @@ abstract class BaseExtension
      */
     protected function getInfo($node)
     {
-        if (!$this->isCodeNode($node) || $node instanceof IndentedCode) {
-            return null;
+        if (!$this->isCodeNode($node)) {
+            return [];
+        }
+
+        if (!is_callable([$node, 'getInfoWords'])) {
+            return [];
         }
 
         $infoWords = $node->getInfoWords();
@@ -185,7 +188,13 @@ abstract class BaseExtension
      */
     protected function getLanguage($node)
     {
-        $language = $this->getInfo($node)[0];
+        $info = $this->getInfo($node);
+
+        if (empty($info)) {
+            return null;
+        }
+
+        $language = $info[0];
 
         return $language ? Xml::escape($language, true) : null;
     }

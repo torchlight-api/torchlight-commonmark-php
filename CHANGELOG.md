@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.5.2 - 2021-09-26
+
+### Fixed
+- Indented code works correctly now. 
+
 ## 0.5.1 - 2021-09-06
 
 ### Changed

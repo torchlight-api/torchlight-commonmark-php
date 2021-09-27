@@ -119,6 +119,28 @@ EOT;
     }
 
     /** @test */
+    public function indented_code_doesnt_fail()
+    {
+        $markdown = <<<'EOT'
+before
+
+    <div>test</div>
+    
+after
+EOT;
+
+        Http::fake();
+
+        $this->render($markdown);
+
+        Http::assertSent(function ($request) {
+            return $request['blocks'][0]['language'] === null
+                && $request['blocks'][0]['code'] === '<div>test</div>';
+        });
+    }
+
+
+    /** @test */
     public function can_load_file()
     {
         config()->set('torchlight.snippet_directories', [
