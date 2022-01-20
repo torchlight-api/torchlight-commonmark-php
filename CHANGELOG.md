@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.5.3 - 2022-01-19
+
+### Added
+
+- Attributes returned from the API will be added to the code block. (The API now returns `data-lang` as an attribute.)
+
 ## 0.5.2 - 2021-09-26
 
 ### Fixed
