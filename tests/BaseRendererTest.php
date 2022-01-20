@@ -52,6 +52,9 @@ EOT;
                 'id' => 'block_id_1',
                 'classes' => 'torchlight',
                 'styles' => 'color: red;',
+                'attrs' => [
+                    'data-lang' => 'lang'
+                ],
                 'highlighted' => 'highlighted',
             ]]
         ];
@@ -64,7 +67,7 @@ EOT;
 
         $expected = <<<EOT
 <p>before</p>
-<pre><code class='torchlight' style='color: red;'>highlighted</code></pre>
+<pre><code data-lang="lang" class='torchlight' style='color: red;'>highlighted</code></pre>
 <p>after</p>
 
 EOT;

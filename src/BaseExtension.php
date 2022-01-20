@@ -66,7 +66,7 @@ abstract class BaseExtension
     public function defaultBlockRenderer()
     {
         return function (Block $block) {
-            return "<pre><code class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
+            return "<pre><code {$block->attrsAsString()}class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
         };
     }
 
