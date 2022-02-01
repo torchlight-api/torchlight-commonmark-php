@@ -314,7 +314,7 @@ EOT;
             'blocks' => [[
                 'id' => 'block_id_1',
                 'highlighted' => 'some php 1',
-            ],[
+            ], [
                 'id' => 'block_id_1_clone_0',
                 'highlighted' => 'some php 2',
             ]]
@@ -335,8 +335,6 @@ EOT;
                 && $request['blocks'][1]['id'] === 'block_id_1_clone_0';
         });
 
-
-
         $expected = <<<EOT
 <pre><code class='' style=''>some php 1</code><code class='' style=''>some php 2</code></pre>
 
@@ -344,7 +342,6 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
-
 
     /** @test */
     public function it_can_set_a_custom_renderer()
