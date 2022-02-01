@@ -21,7 +21,7 @@ abstract class BaseExtension
     protected $customBlockRenderer;
 
     /**
-     * @param  DocumentParsedEvent  $event
+     * @param DocumentParsedEvent $event
      */
     public function onDocumentParsed(DocumentParsedEvent $event)
     {
@@ -50,7 +50,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param  callable  $callback
+     * @param callable $callback
      * @return $this
      */
     public function useCustomBlockRenderer($callback)
@@ -66,7 +66,17 @@ abstract class BaseExtension
     public function defaultBlockRenderer()
     {
         return function (Block $block) {
-            return "<pre><code {$block->attrsAsString()}class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code></pre>";
+            $inner = '';
+
+            // Clones come from multiple themes.
+            $blocks = $block->clones();
+            array_unshift($blocks, $block);
+
+            foreach ($blocks as $block) {
+                $inner .= "<code {$block->attrsAsString()}class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code>";
+            }
+
+            return "<pre>$inner</pre>";
         };
     }
 
@@ -84,13 +94,13 @@ abstract class BaseExtension
     /**
      * Bind into a Commonmark V1 or V2 environment.
      *
-     * @param $environment
-     * @param  string  $renderMethod
+     * @param        $environment
+     * @param string $renderMethod
      */
     protected function bind($environment, $renderMethod)
     {
         // We start by walking the document immediately after it's parsed
-        // to gather up all the code blocks and send off our requests.
+        // to gather all the code blocks and send off our requests.
         $environment->addEventListener(DocumentParsedEvent::class, [$this, 'onDocumentParsed']);
 
         foreach ($this->codeNodes() as $blockType) {

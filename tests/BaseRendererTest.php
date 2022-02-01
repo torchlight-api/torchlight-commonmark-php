@@ -5,6 +5,7 @@ namespace Torchlight\Commonmark\Tests;
 use Illuminate\Support\Facades\Http;
 use Orchestra\Testbench\TestCase;
 use Torchlight\Block;
+use Torchlight\Commonmark\BaseExtension;
 
 abstract class BaseRendererTest extends TestCase
 {
@@ -24,6 +25,7 @@ abstract class BaseRendererTest extends TestCase
             'block_id_3',
         ];
 
+        BaseExtension::$torchlightBlocks = [];
         Block::$generateIdsUsing = function () use (&$ids) {
             return array_shift($ids);
         };
@@ -298,6 +300,51 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
+
+    /** @test */
+    public function can_render_dark_and_light_themes()
+    {
+        $markdown = <<<'EOT'
+```php theme:dark:github-dark,light:github-light
+some php
+```
+EOT;
+
+        $response = [
+            'blocks' => [[
+                'id' => 'block_id_1',
+                'highlighted' => 'some php 1',
+            ],[
+                'id' => 'block_id_1_clone_0',
+                'highlighted' => 'some php 2',
+            ]]
+        ];
+
+        Http::fake([
+            'api.torchlight.dev/*' => Http::response($response, 200),
+        ]);
+
+        $html = $this->render($markdown);
+
+        Http::assertSentCount(1);
+
+        Http::assertSent(function ($request) {
+            return count($request['blocks']) === 2
+                && $request['blocks'][0]['theme'] === 'dark:github-dark'
+                && $request['blocks'][1]['theme'] === 'light:github-light'
+                && $request['blocks'][1]['id'] === 'block_id_1_clone_0';
+        });
+
+
+
+        $expected = <<<EOT
+<pre><code class='' style=''>some php 1</code><code class='' style=''>some php 2</code></pre>
+
+EOT;
+
+        $this->assertEquals($expected, $html);
+    }
+
 
     /** @test */
     public function it_can_set_a_custom_renderer()
