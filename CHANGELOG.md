@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.5.5 - 2022-02-23
+
+### Changed
+
+- Updated torchlight-laravel version constraint
+
 ## 0.5.4 - 2022-02-01
 
 ### Added
