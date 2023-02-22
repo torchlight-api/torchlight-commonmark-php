@@ -76,6 +76,14 @@ abstract class BaseExtension
                 $inner .= "<code {$block->attrsAsString()}class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code>";
             }
 
+            if (config('torchlight.wrap.enabled', false)) {
+                $tag = config('torchlight.wrap.tag', 'div');
+                $attributes = config('torchlight.wrap.attributes', []);
+                $attributes = empty($attributes) ? '' : ' '.str_replace("=", '="', http_build_query($attributes, null, '" ', PHP_QUERY_RFC3986)).'"';
+
+                return '<'.$tag.$attributes.'><pre>'.$inner.'</pre></'.$tag.'>';
+            }
+
             return "<pre>$inner</pre>";
         };
     }

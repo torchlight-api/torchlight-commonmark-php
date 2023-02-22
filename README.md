@@ -63,7 +63,7 @@ return [
     // you can define which cache driver you'd like to use.
     'cache' => env('TORCHLIGHT_CACHE_DRIVER'),
 
-    // Which theme you want to use. You can find all of the themes at
+    // Which theme you want to use. You can find all the themes at
     // https://torchlight.dev/themes, or you can provide your own.
     'theme' => env('TORCHLIGHT_THEME', 'material-theme-palenight'),
 
@@ -75,6 +75,14 @@ return [
 
     // The Host of the API.
     'host' => env('TORCHLIGHT_HOST', 'https://api.torchlight.dev'),
+    
+    // Wrapping Container
+    // You can “wrap” the code block with a container element by configuring the following options:
+    'wrap' => [
+        'enabled' => true,
+        'tag' => 'div',
+        'attributes' => ['class' => 'ode-block-wrapper'],
+    ],
 ];
 ```
 ### Cache
