@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.5.6 - 2022-07-25
+
+### Fixed
+
+- Respect HTML attributes from AttributesExtension on the `<pre>` block
+
 ## 0.5.5 - 2022-02-23
 
 ### Changed

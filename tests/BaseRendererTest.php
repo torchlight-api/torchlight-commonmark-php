@@ -378,4 +378,45 @@ EOT;
 
         $this->assertEquals($expected, $html);
     }
+
+    /** @test */
+    public function sets_attributes_on_pre()
+    {
+        $markdown = <<<'EOT'
+before
+
+{.large}
+```html
+<div>html</div>
+```
+after
+EOT;
+
+        $response = [
+            'blocks' => [[
+                'id' => 'block_id_1',
+                'classes' => 'torchlight',
+                'styles' => 'color: red;',
+                'attrs' => [
+                    'data-lang' => 'lang'
+                ],
+                'highlighted' => 'highlighted',
+            ]]
+        ];
+
+        Http::fake([
+            'api.torchlight.dev/*' => Http::response($response, 200),
+        ]);
+
+        $html = $this->render($markdown);
+
+        $expected = <<<EOT
+<p>before</p>
+<pre class="large"><code data-lang="lang" class='torchlight' style='color: red;'>highlighted</code></pre>
+<p>after</p>
+
+EOT;
+
+        $this->assertEquals($expected, $html);
+    }
 }
