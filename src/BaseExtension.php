@@ -4,6 +4,8 @@ namespace Torchlight\Commonmark;
 
 use Illuminate\Support\Str;
 use League\CommonMark\Event\DocumentParsedEvent;
+use League\CommonMark\Node\Block\AbstractBlock;
+use League\CommonMark\Util\HtmlElement;
 use League\CommonMark\Util\Xml;
 use Torchlight\Block;
 use Torchlight\Torchlight;
@@ -65,7 +67,7 @@ abstract class BaseExtension
      */
     public function defaultBlockRenderer()
     {
-        return function (Block $block) {
+        return function (Block $block, AbstractBlock $node) {
             $inner = '';
 
             // Clones come from multiple themes.
@@ -76,7 +78,11 @@ abstract class BaseExtension
                 $inner .= "<code {$block->attrsAsString()}class='{$block->classes}' style='{$block->styles}'>{$block->highlighted}</code>";
             }
 
-            return "<pre>$inner</pre>";
+            return new HtmlElement(
+                'pre',
+                $node->data->getData('attributes')->export(),
+                $inner
+            );
         };
     }
 
@@ -143,7 +149,7 @@ abstract class BaseExtension
         if (array_key_exists($hash, static::$torchlightBlocks)) {
             $renderer = $this->customBlockRenderer ?? $this->defaultBlockRenderer();
 
-            return call_user_func($renderer, static::$torchlightBlocks[$hash]);
+            return call_user_func($renderer, static::$torchlightBlocks[$hash], $node);
         }
     }
 

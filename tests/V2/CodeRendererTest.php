@@ -3,6 +3,7 @@
 namespace Torchlight\Commonmark\Test\V2;
 
 use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\Attributes\AttributesExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Parser\MarkdownParser;
 use League\CommonMark\Renderer\HtmlRenderer;
@@ -24,6 +25,7 @@ class CodeRendererTest extends BaseRendererTest
     {
         $environment = new Environment();
         $environment->addExtension(new CommonMarkCoreExtension);
+        $environment->addExtension(new AttributesExtension);
         $environment->addExtension($extension ?? $this->extension());
 
         $parser = new MarkdownParser($environment);
