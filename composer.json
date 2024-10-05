@@ -1,5 +1,5 @@
 {
-    "name": "givx/torchlight-commonmark",
+    "name": "torchlight/torchlight-commonmark",
     "description": "A Commonmark extension for Torchlight, the syntax highlighting API.",
     "homepage": "https://torchlight.dev",
     "type": "library",
