@@ -15,7 +15,7 @@ Torchlight is a VS Code-compatible syntax highlighter that requires no JavaScrip
 To install, require the package from composer:
 
 ```shell
-composer require torchlight/torchlight-commonmark
+composer require givx/torchlight-commonmark
 ```
 
 This will install the [Laravel Client](https://github.com/torchlight-api/torchlight-laravel) as well.
