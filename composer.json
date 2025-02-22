@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": "^7.2|^8.0",
-        "torchlight/torchlight-laravel": "^0.5.10",
+        "torchlight/torchlight-laravel": "^0.6.0",
         "league/commonmark": "^1.5|^2.0"
     },
     "require-dev": {
