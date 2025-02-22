@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.6.0 - 2022-02-23
+
+### Changed
+
+- Updated torchlight-laravel version constraint
+
 ## 0.5.5 - 2022-02-23
 
 ### Changed
@@ -50,7 +56,6 @@
 - Bump `torchlight/torchlight-laravel` dependency.
 - Use `Torchlight::highlight` instead of `(new Client)->highlight`
 
-
 ## 0.3.3 - 2021-07-31
 
 ### Changed
@@ -80,7 +85,6 @@
 
 - Bump `torchlight/torchlight-laravel` dependency.
 - Changed package name from `torchlight/commonmark` to `torchlight/torchlight-commonmark`
-
 
 ## 0.1.0
 
