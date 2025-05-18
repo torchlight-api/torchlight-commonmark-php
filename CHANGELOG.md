@@ -1,12 +1,10 @@
 # Changelog
 
-## Unreleased
-
-## 0.6.0 - 2022-02-23
+## 0.5.6 - Unreleased
 
 ### Changed
 
-- Updated torchlight-laravel version constraint
+- Updated torchlight-laravel version constraint to support Laravel 12.x
 
 ## 0.5.5 - 2022-02-23
 
