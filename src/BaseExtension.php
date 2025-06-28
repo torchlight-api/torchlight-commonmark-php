@@ -86,7 +86,7 @@ abstract class BaseExtension
     abstract protected function codeNodes();
 
     /**
-     * @param $node
+     * @param  $node
      * @return string
      */
     abstract protected function getLiteralContent($node);
@@ -112,7 +112,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return bool
      */
     protected function isCodeNode($node)
@@ -121,7 +121,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return Block
      */
     protected function makeTorchlightBlock($node)
@@ -133,7 +133,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return string
      */
     protected function renderNode($node)
@@ -148,7 +148,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return string
      */
     protected function getContent($node)
@@ -174,7 +174,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return array|mixed|null
      */
     protected function getInfo($node)
@@ -193,7 +193,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return string|null
      */
     protected function getLanguage($node)
@@ -210,7 +210,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @param $node
+     * @param  $node
      * @return string
      */
     protected function getTheme($node)

@@ -53,7 +53,7 @@ class TorchlightExtension extends BaseExtension implements ExtensionInterface, N
     /**
      * Get the string content from a V2 node.
      *
-     * @param $node
+     * @param  $node
      * @return string
      */
     protected function getLiteralContent($node)
